@@ -1,10 +1,10 @@
 package com.axell.fullcycle.video.catalog.admin.domain.category;
 
 import java.time.Instant;
-import java.util.UUID;
 
-public class Category {
-    private String id;
+import com.axell.fullcycle.video.catalog.admin.domain.AggregateRoot;
+
+public class Category extends AggregateRoot<CategoryId> {
     private String name;
     private String description;
     private boolean active;
@@ -13,14 +13,14 @@ public class Category {
     private Instant deletedAt;
 
     private Category(
-            final String id,
+            final CategoryId id,
             final String name,
             final String description,
             final boolean active,
             final Instant createdAt,
             final Instant updatedAt,
             final Instant deletedAt) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.description = description;
         this.active = active;
@@ -30,12 +30,12 @@ public class Category {
     }
 
     public static Category newCategory(final String name, final String description, final boolean isActive) {
-        final var id = UUID.randomUUID().toString();
+        final var id = CategoryId.unique();
         final var now = Instant.now();
         return new Category(id, name, description, isActive, now, now, null);
     }
 
-    public String getId() {
+    public CategoryId getId() {
         return id;
     }
 
