@@ -5,6 +5,9 @@ import com.axell.fullcycle.video.catalog.admin.domain.validation.ValidationHandl
 import com.axell.fullcycle.video.catalog.admin.domain.validation.Validator;
 
 public class CategoryValidator extends Validator {
+    private static final int NAME_MIN_LENGTH = 3;
+    private static final int NAME_MAX_LENGTH = 255;
+
     private final Category category;
 
     public CategoryValidator(Category category, ValidationHandler handler) {
@@ -14,7 +17,16 @@ public class CategoryValidator extends Validator {
 
     @Override
     public void validate() {
-        if (category.getName() == null)
+        checkNameConstraints();
+    }
+
+    private void checkNameConstraints() {
+        String name = category.getName();
+        if (name == null)
             validationHandler().append(new Error("`name` should not be null"));
+        if (name.isEmpty())
+            validationHandler().append(new Error("`name` should not be empty"));
+        if (name.length() < NAME_MIN_LENGTH || name.length() > NAME_MAX_LENGTH)
+            validationHandler().append(new Error("`name` must be between 3 and 255 characters"));
     }
 }

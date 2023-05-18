@@ -22,7 +22,7 @@ public class Category extends AggregateRoot<CategoryId> {
             final Instant updatedAt,
             final Instant deletedAt) {
         super(id);
-        this.name = name;
+        this.name = name != null ? name.trim() : null;
         this.description = description;
         this.active = active;
         this.createdAt = createdAt;
@@ -33,7 +33,8 @@ public class Category extends AggregateRoot<CategoryId> {
     public static Category newCategory(final String name, final String description, final boolean isActive) {
         final var id = CategoryId.unique();
         final var now = Instant.now();
-        return new Category(id, name, description, isActive, now, now, null);
+        final var deletedAt = isActive ? null : now;
+        return new Category(id, name, description, isActive, now, now, deletedAt);
     }
 
     public CategoryId getId() {
