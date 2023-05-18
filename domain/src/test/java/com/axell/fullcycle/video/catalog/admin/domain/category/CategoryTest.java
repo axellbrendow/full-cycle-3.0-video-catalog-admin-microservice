@@ -3,6 +3,9 @@ package com.axell.fullcycle.video.catalog.admin.domain.category;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.axell.fullcycle.video.catalog.admin.domain.exceptions.DomainException;
+import com.axell.fullcycle.video.catalog.admin.domain.validation.handler.ThrowsValidationHandler;
+
 public class CategoryTest {
     @Test
     public void givenValidParams_whenCallNewCategory_thenInstantiateACategory() {
@@ -32,9 +35,10 @@ public class CategoryTest {
 
         final var actualCategory = Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
-        final var exception = Assertions.assertThrows(DomainException.class, () -> actualCategory.validate());
+        final var exception = Assertions.assertThrows(DomainException.class,
+                () -> actualCategory.validate(new ThrowsValidationHandler()));
 
         Assertions.assertEquals(expectedErrorCount, exception.getErrors().size());
-        Assertions.assertEquals(expectedErrorMessage, exception.getErrorMessage());
+        Assertions.assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
     }
 }

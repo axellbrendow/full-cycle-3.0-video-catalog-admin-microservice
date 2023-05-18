@@ -3,6 +3,7 @@ package com.axell.fullcycle.video.catalog.admin.domain.category;
 import java.time.Instant;
 
 import com.axell.fullcycle.video.catalog.admin.domain.AggregateRoot;
+import com.axell.fullcycle.video.catalog.admin.domain.validation.ValidationHandler;
 
 public class Category extends AggregateRoot<CategoryId> {
     private String name;
@@ -63,4 +64,8 @@ public class Category extends AggregateRoot<CategoryId> {
         return deletedAt;
     }
 
+    @Override
+    public void validate(final ValidationHandler handler) {
+        new CategoryValidator(this, handler).validate();
+    }
 }
