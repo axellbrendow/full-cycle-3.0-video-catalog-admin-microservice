@@ -24,9 +24,9 @@ public class CategoryValidator extends Validator {
         String name = category.getName();
         if (name == null)
             validationHandler().append(new Error("`name` should not be null"));
-        if (name.isEmpty())
+        else if (name.isEmpty())
             validationHandler().append(new Error("`name` should not be empty"));
-        if (name.length() < NAME_MIN_LENGTH || name.length() > NAME_MAX_LENGTH)
+        else if (name.length() < NAME_MIN_LENGTH || name.length() > NAME_MAX_LENGTH)
             validationHandler().append(new Error("`name` must be between 3 and 255 characters"));
     }
 }
