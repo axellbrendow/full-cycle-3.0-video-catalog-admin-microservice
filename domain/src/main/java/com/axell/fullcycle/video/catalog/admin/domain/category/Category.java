@@ -5,7 +5,7 @@ import java.time.Instant;
 import com.axell.fullcycle.video.catalog.admin.domain.AggregateRoot;
 import com.axell.fullcycle.video.catalog.admin.domain.validation.ValidationHandler;
 
-public class Category extends AggregateRoot<CategoryId> {
+public class Category extends AggregateRoot<CategoryId> implements Cloneable {
     private String name;
     private String description;
     private boolean active;
@@ -99,5 +99,16 @@ public class Category extends AggregateRoot<CategoryId> {
         this.description = description;
         this.updatedAt = Instant.now();
         return this;
+    }
+
+    @Override
+    public Category clone() {
+        // All fields of this class are Immutable, so there's no need to copy anything
+        // manually.
+        try {
+            return (Category) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
