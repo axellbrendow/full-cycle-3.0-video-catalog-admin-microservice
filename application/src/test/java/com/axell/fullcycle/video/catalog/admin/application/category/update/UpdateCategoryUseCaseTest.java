@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalAnswers;
@@ -24,6 +25,11 @@ public class UpdateCategoryUseCaseTest {
 
     @Mock
     private CategoryRepository repository;
+
+    @BeforeEach
+    void beforeEach() {
+        Mockito.reset(repository);
+    }
 
     @Test
     public void givenAValidCommand_whenCallUpdateCategory_shouldReturnCategoryId() {

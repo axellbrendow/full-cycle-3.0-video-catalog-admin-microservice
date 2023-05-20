@@ -3,6 +3,7 @@ package com.axell.fullcycle.video.catalog.admin.application.category.create;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalAnswers;
@@ -12,7 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryRepository;
-import com.axell.fullcycle.video.catalog.admin.domain.validation.handler.Notification;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateCategoryUseCaseTest {
@@ -21,6 +21,11 @@ public class CreateCategoryUseCaseTest {
 
     @Mock
     private CategoryRepository repository;
+
+    @BeforeEach
+    void beforeEach() {
+        Mockito.reset(repository);
+    }
 
     @Test
     public void givenAValidCommand_whenCallCreateCategory_shouldReturnCategoryId() {
