@@ -48,7 +48,7 @@ public class GetCategoryByIdUseCaseTest {
         Assertions.assertEquals(expectedDescription, actualCategory.description());
         Assertions.assertEquals(expectedIsActive, actualCategory.isActive());
         Assertions.assertEquals(category.getCreatedAt(), actualCategory.createdAt());
-        Assertions.assertTrue(actualCategory.updatedAt().isAfter(category.getUpdatedAt()));
+        Assertions.assertEquals(category.getUpdatedAt(), actualCategory.updatedAt());
         Assertions.assertEquals(category.getDeletedAt(), actualCategory.deletedAt());
     }
 
@@ -59,7 +59,8 @@ public class GetCategoryByIdUseCaseTest {
 
         Mockito.when(repository.findById(expectedId)).thenReturn(Optional.empty());
 
-        final var actualException = Assertions.assertThrows(DomainException.class, () -> useCase.execute(expectedId.getValue()));
+        final var actualException = Assertions.assertThrows(DomainException.class,
+                () -> useCase.execute(expectedId.getValue()));
 
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
     }
@@ -71,7 +72,8 @@ public class GetCategoryByIdUseCaseTest {
 
         Mockito.when(repository.findById(expectedId)).thenThrow(new IllegalStateException(expectedErrorMessage));
 
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(expectedId.getValue()));
+        final var actualException = Assertions.assertThrows(IllegalStateException.class,
+                () -> useCase.execute(expectedId.getValue()));
 
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
     }
