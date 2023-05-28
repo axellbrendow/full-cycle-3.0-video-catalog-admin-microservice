@@ -1,0 +1,7 @@
+# Spring reads application.yml first and then reads this file overriding the values
+server:
+  port: 8080
+  undertow:
+    threads:
+      worker: 10
+      io: 2
