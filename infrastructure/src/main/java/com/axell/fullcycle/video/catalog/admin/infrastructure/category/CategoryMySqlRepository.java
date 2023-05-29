@@ -9,6 +9,7 @@ import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryId;
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryRepository;
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategorySearchQuery;
 import com.axell.fullcycle.video.catalog.admin.domain.pagination.Pagination;
+import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaEntity;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaRepository;
 
 @Service
@@ -21,8 +22,7 @@ public class CategoryMySqlRepository implements CategoryRepository {
 
     @Override
     public Category create(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        return repository.save(CategoryJpaEntity.from(category)).toDomainCategory();
     }
 
     @Override
