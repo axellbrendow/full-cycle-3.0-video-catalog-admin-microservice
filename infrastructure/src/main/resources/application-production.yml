@@ -5,3 +5,9 @@ mysql:
   password: ${DATABASE_MYSQL_PASSWORD}
   database: videos_adm
   url: ${DATABASE_MYSQL_JDBC_URL}
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
