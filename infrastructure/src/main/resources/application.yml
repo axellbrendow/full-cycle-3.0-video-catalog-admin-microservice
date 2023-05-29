@@ -14,3 +14,10 @@ spring:
     url: jdbc:mysql://${mysql.url}/${mysql.database}?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8
     username: ${mysql.username}
     password: ${mysql.password}
+    hikari: # Hikari is a connection pool manager
+      auto-commit: false
+      connection-timeout: 250 # 250ms, it's good to keep it small to not block the threads.
+      max-lifetime: 600000 # Maximum time a connection can be kept open (10 min) - security.
+      maximum-pool-size: 20 # At most 20 connections to the database. It's good to keep a low number as that's costly for the database to handle. https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+      minimum-idle: 10 # Can reduce the pool to a minimum of 10 connections if they are not being used.
+      pool-name: master
