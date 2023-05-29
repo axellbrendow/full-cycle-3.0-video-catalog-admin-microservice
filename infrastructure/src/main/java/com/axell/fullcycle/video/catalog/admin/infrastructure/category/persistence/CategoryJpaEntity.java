@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "category")
-public class CategoryJPAEntity {
+public class CategoryJpaEntity {
     @Id
     private String id;
 
@@ -37,10 +37,10 @@ public class CategoryJPAEntity {
     @Column(name = "deleted_at", nullable = true, columnDefinition = "DATETIME(6)")
     private Instant deletedAt;
 
-    public CategoryJPAEntity() {
+    public CategoryJpaEntity() {
     }
 
-    private CategoryJPAEntity(
+    private CategoryJpaEntity(
             final String id,
             final String name,
             final String description,
@@ -57,8 +57,8 @@ public class CategoryJPAEntity {
         this.deletedAt = deletedAt;
     }
 
-    public static CategoryJPAEntity from(final Category category) {
-        return new CategoryJPAEntity(category.getId().getValue(), category.getName(), category.getDescription(),
+    public static CategoryJpaEntity from(final Category category) {
+        return new CategoryJpaEntity(category.getId().getValue(), category.getName(), category.getDescription(),
                 category.isActive(), category.getCreatedAt(), category.getUpdatedAt(), category.getDeletedAt());
     }
 
