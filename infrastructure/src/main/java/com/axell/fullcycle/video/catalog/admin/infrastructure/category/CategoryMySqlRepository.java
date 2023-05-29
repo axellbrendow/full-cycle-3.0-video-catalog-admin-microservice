@@ -32,8 +32,7 @@ public class CategoryMySqlRepository implements CategoryRepository {
 
     @Override
     public Optional<Category> findById(CategoryId id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return repository.findById(id.getValue()).map(CategoryJpaEntity::toDomainCategory);
     }
 
     @Override
