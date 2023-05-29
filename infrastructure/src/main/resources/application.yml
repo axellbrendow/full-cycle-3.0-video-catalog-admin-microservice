@@ -27,7 +27,7 @@ spring:
     hibernate:
       ddl-auto: none # Hibernate will not create or update the database schema
     properties:
-      "[hibernate.dialect]": org.hibernate.dialect.MySQL5InnoDBDialect
+      "[hibernate.dialect]": org.hibernate.dialect.MySQLDialect
       "[hibernate.generate_statistics]": false
       "[hibernate.connection.provider_disables_autocommit]": true
       # To maximize performance, we disable auto-commit and open-in-view.

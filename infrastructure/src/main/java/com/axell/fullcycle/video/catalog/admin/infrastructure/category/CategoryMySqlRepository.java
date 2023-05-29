@@ -9,12 +9,13 @@ import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryId;
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryRepository;
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategorySearchQuery;
 import com.axell.fullcycle.video.catalog.admin.domain.pagination.Pagination;
+import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaRepository;
 
 @Service
 public class CategoryMySqlRepository implements CategoryRepository {
-    private final CategoryRepository repository;
+    private final CategoryJpaRepository repository;
 
-    public CategoryMySqlRepository(CategoryRepository repository) {
+    public CategoryMySqlRepository(CategoryJpaRepository repository) {
         this.repository = repository;
     }
 
