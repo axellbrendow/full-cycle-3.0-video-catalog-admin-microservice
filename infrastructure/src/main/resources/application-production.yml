@@ -1,0 +1,7 @@
+# Spring reads application.yml first and then reads this file overriding the values
+
+mysql:
+  username: ${DATABASE_MYSQL_USERNAME}
+  password: ${DATABASE_MYSQL_PASSWORD}
+  database: videos_adm
+  url: ${DATABASE_MYSQL_JDBC_URL}

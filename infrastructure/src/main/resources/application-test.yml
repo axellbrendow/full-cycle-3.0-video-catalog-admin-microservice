@@ -1,3 +1,5 @@
+# Spring reads application.yml first and then reads this file overriding the values
+
 spring:
   datasource:
     driver-class-name: org.h2.Driver
