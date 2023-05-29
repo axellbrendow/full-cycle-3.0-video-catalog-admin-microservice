@@ -1,6 +1,7 @@
 package com.axell.fullcycle.video.catalog.admin.domain.category;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import com.axell.fullcycle.video.catalog.admin.domain.AggregateRoot;
 import com.axell.fullcycle.video.catalog.admin.domain.validation.ValidationHandler;
@@ -25,8 +26,8 @@ public class Category extends AggregateRoot<CategoryId> implements Cloneable {
         this.name = name != null ? name.trim() : null;
         this.description = description;
         this.active = active;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = Objects.requireNonNull(createdAt, "`createdAt` should not be null");
+        this.updatedAt = Objects.requireNonNull(updatedAt, "`updatedAt` should not be null");
         this.deletedAt = deletedAt;
     }
 
