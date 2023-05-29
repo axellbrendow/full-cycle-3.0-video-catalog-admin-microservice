@@ -2,6 +2,9 @@ package com.axell.fullcycle.video.catalog.admin.infrastructure.category;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.axell.fullcycle.video.catalog.admin.domain.category.Category;
@@ -11,7 +14,11 @@ import com.axell.fullcycle.video.catalog.admin.domain.category.CategorySearchQue
 import com.axell.fullcycle.video.catalog.admin.domain.pagination.Pagination;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaEntity;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaRepository;
+import com.axell.fullcycle.video.catalog.admin.infrastructure.utils.SpecificationUtils;
 
+/**
+ * Implements the repository contract defined by domain of the application.
+ */
 @Service
 public class CategoryMySqlRepository implements CategoryRepository {
     private final CategoryJpaRepository repository;
@@ -37,8 +44,24 @@ public class CategoryMySqlRepository implements CategoryRepository {
 
     @Override
     public Pagination<Category> findAll(CategorySearchQuery query) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        final var page = PageRequest.of(
+                query.page(),
+                query.perPage(),
+                Sort.by(Sort.Direction.fromString(query.direction()), query.sort()));
+
+        final var specifications = Optional.ofNullable(query.terms())
+                .filter(str -> !str.isBlank())
+                .map(str -> SpecificationUtils.<CategoryJpaEntity>like("name", str)
+                        .or(SpecificationUtils.like("description", str)))
+                .orElse(null);
+
+        final var pageResult = repository.findAll(Specification.where(specifications), page);
+
+        return new Pagination<>(
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalElements(),
+                pageResult.map(CategoryJpaEntity::toDomainCategory).toList());
     }
 
     @Override

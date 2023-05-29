@@ -1,11 +1,14 @@
 package com.axell.fullcycle.video.catalog.admin.infrastructure.category;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.axell.fullcycle.video.catalog.admin.domain.category.Category;
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryId;
+import com.axell.fullcycle.video.catalog.admin.domain.category.CategorySearchQuery;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.MySqlRepositoryTest;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaEntity;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaRepository;
@@ -157,5 +160,160 @@ public class CategoryMySqlRepositoryTest {
         final var actualCategory = mySqlRepository.findById(CategoryId.from("empty"));
 
         Assertions.assertTrue(actualCategory.isEmpty());
+    }
+
+    @Test
+    public void givenPrePersistedCategories_whenCallsFindAll_shouldReturnPaginated() {
+        final var expectedPage = 0;
+        final var expectedPerPage = 1;
+        final var expectedTotal = 3;
+
+        final var movies = Category.newCategory("Movies", null, true);
+        final var series = Category.newCategory("Series", null, true);
+        final var documentaries = Category.newCategory("Documentaries", null, true);
+
+        Assertions.assertEquals(0, jpaRepository.count());
+
+        jpaRepository.saveAll(List.of(
+                CategoryJpaEntity.from(movies),
+                CategoryJpaEntity.from(series),
+                CategoryJpaEntity.from(documentaries)));
+
+        Assertions.assertEquals(3, jpaRepository.count());
+
+        final var query = new CategorySearchQuery(0, 1, "", "name", "asc");
+        final var actualResult = mySqlRepository.findAll(query);
+
+        Assertions.assertEquals(expectedPage, actualResult.page());
+        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
+        Assertions.assertEquals(expectedTotal, actualResult.total());
+        Assertions.assertEquals(expectedPerPage, actualResult.items().size());
+        Assertions.assertEquals(documentaries.getId(), actualResult.items().get(0).getId());
+    }
+
+    @Test
+    public void givenEmptyCategoriesTable_whenCallsFindAll_shouldReturnEmptyPage() {
+        final var expectedPage = 0;
+        final var expectedPerPage = 1;
+        final var expectedTotal = 0;
+
+        Assertions.assertEquals(0, jpaRepository.count());
+
+        final var query = new CategorySearchQuery(0, 1, "", "name", "asc");
+        final var actualResult = mySqlRepository.findAll(query);
+
+        Assertions.assertEquals(expectedPage, actualResult.page());
+        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
+        Assertions.assertEquals(expectedTotal, actualResult.total());
+        Assertions.assertEquals(0, actualResult.items().size());
+    }
+
+    @Test
+    public void givenMultiplePagesOfCategories_whenCallsFindAllWithEachPage_shouldReturnPaginated() {
+        final var movies = Category.newCategory("Movies", null, true);
+        final var series = Category.newCategory("Series", null, true);
+        final var documentaries = Category.newCategory("Documentaries", null, true);
+
+        Assertions.assertEquals(0, jpaRepository.count());
+
+        jpaRepository.saveAll(List.of(
+                CategoryJpaEntity.from(movies),
+                CategoryJpaEntity.from(series),
+                CategoryJpaEntity.from(documentaries)));
+
+        Assertions.assertEquals(3, jpaRepository.count());
+
+        var expectedPage = 0;
+        final var expectedPerPage = 1;
+        final var expectedTotal = 3;
+
+        var query = new CategorySearchQuery(0, 1, "", "name", "asc");
+        var actualResult = mySqlRepository.findAll(query);
+
+        Assertions.assertEquals(expectedPage, actualResult.page());
+        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
+        Assertions.assertEquals(expectedTotal, actualResult.total());
+        Assertions.assertEquals(expectedPerPage, actualResult.items().size());
+        Assertions.assertEquals(documentaries.getId(), actualResult.items().get(0).getId());
+
+        expectedPage = 1;
+
+        query = new CategorySearchQuery(1, 1, "", "name", "asc");
+        actualResult = mySqlRepository.findAll(query);
+
+        Assertions.assertEquals(expectedPage, actualResult.page());
+        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
+        Assertions.assertEquals(expectedTotal, actualResult.total());
+        Assertions.assertEquals(expectedPerPage, actualResult.items().size());
+        Assertions.assertEquals(movies.getId(), actualResult.items().get(0).getId());
+
+        expectedPage = 2;
+
+        query = new CategorySearchQuery(2, 1, "", "name", "asc");
+        actualResult = mySqlRepository.findAll(query);
+
+        Assertions.assertEquals(expectedPage, actualResult.page());
+        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
+        Assertions.assertEquals(expectedTotal, actualResult.total());
+        Assertions.assertEquals(expectedPerPage, actualResult.items().size());
+        Assertions.assertEquals(series.getId(), actualResult.items().get(0).getId());
+    }
+
+    @Test
+    public void givenPrePersistedCategoriesAndDocAsTerms_whenCallsFindAllAndTermsMatchCategoryName_shouldReturnPaginated() {
+        final var expectedPage = 0;
+        final var expectedPerPage = 1;
+        final var expectedTotal = 1;
+
+        final var movies = Category.newCategory("Movies", null, true);
+        final var series = Category.newCategory("Series", null, true);
+        final var documentaries = Category.newCategory("Documentaries", null, true);
+
+        Assertions.assertEquals(0, jpaRepository.count());
+
+        jpaRepository.saveAll(List.of(
+                CategoryJpaEntity.from(movies),
+                CategoryJpaEntity.from(series),
+                CategoryJpaEntity.from(documentaries)));
+
+        Assertions.assertEquals(3, jpaRepository.count());
+
+        final var query = new CategorySearchQuery(0, 1, "doc", "name", "asc");
+        final var actualResult = mySqlRepository.findAll(query);
+
+        Assertions.assertEquals(expectedPage, actualResult.page());
+        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
+        Assertions.assertEquals(expectedTotal, actualResult.total());
+        Assertions.assertEquals(expectedPerPage, actualResult.items().size());
+        Assertions.assertEquals(documentaries.getId(), actualResult.items().get(0).getId());
+    }
+
+    @Test
+    public void givenPrePersistedCategoriesAndMostWatchedAsTerms_whenCallsFindAllAndTermsMatchCategoryDescription_shouldReturnPaginated() {
+        final var expectedPage = 0;
+        final var expectedPerPage = 1;
+        final var expectedTotal = 1;
+
+        final var movies = Category.newCategory("Movies", "Most watched category", true);
+        final var series = Category.newCategory("Series", "A watched category", true);
+        final var documentaries = Category.newCategory("Documentaries", "The least watched category", true);
+
+        Assertions.assertEquals(0, jpaRepository.count());
+
+        jpaRepository.saveAll(List.of(
+                CategoryJpaEntity.from(movies),
+                CategoryJpaEntity.from(series),
+                CategoryJpaEntity.from(documentaries)));
+
+        Assertions.assertEquals(3, jpaRepository.count());
+
+        final var query = new CategorySearchQuery(0, 1, "MOST WATCHED", "name", "asc");
+        final var actualResult = mySqlRepository.findAll(query);
+
+        Assertions.assertEquals(expectedPage, actualResult.page());
+        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
+        Assertions.assertEquals(expectedTotal, actualResult.total());
+        Assertions.assertEquals(expectedPerPage, actualResult.items().size());
+        Assertions.assertEquals(movies.getId(), actualResult.items().get(0).getId());
     }
 }
