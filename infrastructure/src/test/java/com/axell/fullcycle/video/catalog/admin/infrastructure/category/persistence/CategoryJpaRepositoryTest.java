@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import com.axell.fullcycle.video.catalog.admin.MySqlRepositoryTest;
 import com.axell.fullcycle.video.catalog.admin.domain.category.Category;
-import com.axell.fullcycle.video.catalog.admin.infrastructure.MySqlRepositoryTest;
 
 @MySqlRepositoryTest
 public class CategoryJpaRepositoryTest {

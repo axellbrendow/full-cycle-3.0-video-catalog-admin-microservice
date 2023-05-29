@@ -17,7 +17,7 @@ import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persisten
 import com.axell.fullcycle.video.catalog.admin.infrastructure.utils.SpecificationUtils;
 
 /**
- * Implements the repository contract defined by domain of the application.
+ * Implements the repository contract defined by the domain of the application.
  */
 @Service
 public class CategoryMySqlRepository implements CategoryRepository {

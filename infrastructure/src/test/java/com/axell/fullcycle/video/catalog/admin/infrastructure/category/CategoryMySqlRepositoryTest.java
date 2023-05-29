@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.axell.fullcycle.video.catalog.admin.MySqlRepositoryTest;
 import com.axell.fullcycle.video.catalog.admin.domain.category.Category;
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryId;
 import com.axell.fullcycle.video.catalog.admin.domain.category.CategorySearchQuery;
-import com.axell.fullcycle.video.catalog.admin.infrastructure.MySqlRepositoryTest;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaEntity;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaRepository;
 
