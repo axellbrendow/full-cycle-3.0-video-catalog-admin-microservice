@@ -16,19 +16,18 @@ import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persisten
 public class CategoryMySqlRepository implements CategoryRepository {
     private final CategoryJpaRepository repository;
 
-    public CategoryMySqlRepository(CategoryJpaRepository repository) {
+    public CategoryMySqlRepository(final CategoryJpaRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public Category create(Category category) {
-        return repository.save(CategoryJpaEntity.from(category)).toDomainCategory();
+    public Category create(final Category category) {
+        return save(category);
     }
 
     @Override
-    public Category update(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public Category update(final Category category) {
+        return save(category);
     }
 
     @Override
@@ -47,5 +46,9 @@ public class CategoryMySqlRepository implements CategoryRepository {
     public void deleteById(CategoryId id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    }
+
+    private Category save(final Category category) {
+        return repository.save(CategoryJpaEntity.from(category)).toDomainCategory();
     }
 }
