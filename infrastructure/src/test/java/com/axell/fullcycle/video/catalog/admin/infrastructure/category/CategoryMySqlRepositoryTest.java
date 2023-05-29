@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.axell.fullcycle.video.catalog.admin.domain.category.Category;
+import com.axell.fullcycle.video.catalog.admin.domain.category.CategoryId;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.MySqlRepositoryTest;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaEntity;
 import com.axell.fullcycle.video.catalog.admin.infrastructure.category.persistence.CategoryJpaRepository;
@@ -96,5 +97,29 @@ public class CategoryMySqlRepositoryTest {
         Assertions.assertTrue(persistedCategory.getUpdatedAt().isAfter(category.getUpdatedAt()));
         Assertions.assertEquals(category.getDeletedAt(), persistedCategory.getDeletedAt());
         Assertions.assertNull(persistedCategory.getDeletedAt());
+    }
+
+    @Test
+    public void givenAPrePersistedCategoryAndValidCategoryId_whenTryToDeleteIt_shouldDeleteCategory() {
+        final var category = Category.newCategory("Movies", null, true);
+
+        Assertions.assertEquals(0, jpaRepository.count());
+
+        jpaRepository.saveAndFlush(CategoryJpaEntity.from(category));
+
+        Assertions.assertEquals(1, jpaRepository.count());
+
+        mySqlRepository.deleteById(category.getId());
+
+        Assertions.assertEquals(0, jpaRepository.count());
+    }
+
+    @Test
+    public void givenAnInvalidCategoryId_whenTryToDeleteIt_shouldIgnore() {
+        Assertions.assertEquals(0, jpaRepository.count());
+
+        mySqlRepository.deleteById(CategoryId.from("invalid"));
+
+        Assertions.assertEquals(0, jpaRepository.count());
     }
 }

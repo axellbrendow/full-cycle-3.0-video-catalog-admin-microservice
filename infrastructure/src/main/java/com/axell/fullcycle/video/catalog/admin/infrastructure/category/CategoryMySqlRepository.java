@@ -44,8 +44,10 @@ public class CategoryMySqlRepository implements CategoryRepository {
 
     @Override
     public void deleteById(CategoryId id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        final var idValue = id.getValue();
+        if (repository.existsById(idValue)) {
+            repository.deleteById(idValue);
+        }
     }
 
     private Category save(final Category category) {
