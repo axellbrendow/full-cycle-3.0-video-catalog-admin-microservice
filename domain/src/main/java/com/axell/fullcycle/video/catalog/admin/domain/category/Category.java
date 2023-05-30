@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 import com.axell.fullcycle.video.catalog.admin.domain.AggregateRoot;
+import com.axell.fullcycle.video.catalog.admin.domain.utils.InstantUtils;
 import com.axell.fullcycle.video.catalog.admin.domain.validation.ValidationHandler;
 
 public class Category extends AggregateRoot<CategoryId> implements Cloneable {
@@ -33,7 +34,7 @@ public class Category extends AggregateRoot<CategoryId> implements Cloneable {
 
     public static Category newCategory(final String name, final String description, final boolean isActive) {
         final var id = CategoryId.unique();
-        final var now = Instant.now();
+        final var now = InstantUtils.now();
         final var deletedAt = isActive ? null : now;
         return new Category(id, name, description, isActive, now, now, deletedAt);
     }
@@ -73,17 +74,17 @@ public class Category extends AggregateRoot<CategoryId> implements Cloneable {
 
     public Category deactivate() {
         if (getDeletedAt() == null)
-            deletedAt = Instant.now();
+            deletedAt = InstantUtils.now();
 
         active = false;
-        updatedAt = Instant.now();
+        updatedAt = InstantUtils.now();
         return this;
     }
 
     public Category activate() {
         deletedAt = null;
         active = true;
-        updatedAt = Instant.now();
+        updatedAt = InstantUtils.now();
         return this;
     }
 
@@ -98,7 +99,7 @@ public class Category extends AggregateRoot<CategoryId> implements Cloneable {
 
         this.name = name;
         this.description = description;
-        this.updatedAt = Instant.now();
+        this.updatedAt = InstantUtils.now();
         return this;
     }
 
