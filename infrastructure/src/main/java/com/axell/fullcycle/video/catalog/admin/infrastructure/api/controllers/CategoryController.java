@@ -26,7 +26,7 @@ public class CategoryController implements CategoryApi {
 
     @Override
     public ResponseEntity<?> createCategory(final CreateCategoryRequest input) {
-        final var aCommand = CreateCategoryCommand.with(
+        final var command = CreateCategoryCommand.with(
                 input.name(),
                 input.description(),
                 input.active() != null ? input.active() : true);
@@ -37,7 +37,7 @@ public class CategoryController implements CategoryApi {
         final Function<CreateCategoryOutput, ResponseEntity<?>> onSuccess = output -> ResponseEntity
                 .created(URI.create("/categories/" + output.id())).body(output);
 
-        return this.createCategoryUseCase.execute(aCommand)
+        return this.createCategoryUseCase.execute(command)
                 .fold(onError, onSuccess);
     }
 

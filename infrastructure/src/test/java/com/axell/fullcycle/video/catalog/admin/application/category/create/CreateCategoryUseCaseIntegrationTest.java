@@ -37,7 +37,7 @@ public class CreateCategoryUseCaseIntegrationTest {
 
         Assertions.assertEquals(1, jpaRepository.count());
 
-        final var category = jpaRepository.findById(output.id().getValue()).get();
+        final var category = jpaRepository.findById(output.id()).get();
 
         Assertions.assertEquals(expectedName, category.getName());
         Assertions.assertEquals(expectedDescription, category.getDescription());
@@ -86,7 +86,7 @@ public class CreateCategoryUseCaseIntegrationTest {
 
         Assertions.assertEquals(1, jpaRepository.count());
 
-        final var category = jpaRepository.findById(output.id().getValue()).get();
+        final var category = jpaRepository.findById(output.id()).get();
 
         Assertions.assertEquals(expectedName, category.getName());
         Assertions.assertEquals(expectedDescription, category.getDescription());
